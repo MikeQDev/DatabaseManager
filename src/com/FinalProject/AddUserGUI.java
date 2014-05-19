@@ -15,6 +15,7 @@ public class AddUserGUI extends JFrame{
 	private JPanel inputPanel, buttonPanel, radioPanel;
 	private String userName, password;
 	private ImageIcon addUserIcon = new ImageIcon(getClass().getResource("img/b_usradd.png"));
+	private DBInteracter dI = HomeGUI.dI;
 	public AddUserGUI(){
 		setTitle("Create new DB user");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -99,7 +100,7 @@ public class AddUserGUI extends JFrame{
 			
 			if(!userField.getText().equals("")){
 				if(comparePasswords()){
-					DBInteracter dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
+					//dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
 					if(userRadio.isSelected())
 						dI.addUser(userName, password, 0);
 					else if(adminRadio.isSelected())

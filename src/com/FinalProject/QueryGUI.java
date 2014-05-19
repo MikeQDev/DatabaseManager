@@ -11,6 +11,7 @@ public class QueryGUI extends JFrame{
 	private JButton submitButton, clearButton, closeButton;
 	private String dbUser, dbPass;
 	private ImageIcon queryIcon = new ImageIcon(getClass().getResource("img/b_search.png"));
+	private DBInteracter dI = HomeGUI.dI;
 	public QueryGUI(String user, String pass){
 		dbUser = user;
 		dbPass = pass;
@@ -54,7 +55,7 @@ public class QueryGUI extends JFrame{
 	}
 	private class SubmitListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			DBInteracter dI = new DBInteracter(dbUser, dbPass);
+			//DBInteracter dI = new DBInteracter(dbUser, dbPass);
 			dI.createQueryTable(textArea.getText());
 		}
 	}

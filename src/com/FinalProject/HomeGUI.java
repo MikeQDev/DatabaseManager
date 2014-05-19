@@ -2,6 +2,9 @@ package com.FinalProject;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.swing.*;
 
@@ -34,9 +37,18 @@ public class HomeGUI extends JFrame{
 	public static int refreshTime = 3000;
 	public static Timer rfTimer;
 	private Color headerColorBack, headerColorFore;
+	private final String DB_URL = "jdbc:mysql://localhost/userdb";
+	public static Connection conn;
+	public static DBInteracter dI;// = new DBInteracter(dbUser, dbPass);
 	public HomeGUI(String u, String p){
 		dbUser = u;
 		dbPass = p;
+		try {
+			conn = DriverManager.getConnection(DB_URL, dbUser, dbPass);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error connecting to database.");
+		}
+		dI = new DBInteracter(conn, u, p);
 		setPreferredSize(new Dimension(806,354));
 		setTitle("Database manager - Logged in as "+dbUser+" (ADMIN)");
 		setIconImage(homeIcon.getImage());
@@ -49,9 +61,20 @@ public class HomeGUI extends JFrame{
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setVisible(true);
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+            public void run() {
+            	if(conn!=null){
+    				try {
+    					conn.close();
+    				} catch (SQLException e1) {
+    					JOptionPane.showMessageDialog(null, "An error occured while closing connection.");
+    				}
+    			}
+            }
+		});
 	}
 	public void getUserPriv(){
-		DBInteracter dI = new DBInteracter(dbUser, dbPass);
+		//DBInteracter dI = new DBInteracter(dbUser, dbPass);
 		boolean isAdmin = dI.checkAdmin();
 		if(!isAdmin)
 			disableAdmins();
@@ -78,7 +101,7 @@ public class HomeGUI extends JFrame{
 		headerColorBack = OptionGUI.selectedBack;
 		headerColorFore = OptionGUI.selectedFore;
 		tablePanel = new JPanel();
-		DBInteracter dI = new DBInteracter(dbUser, dbPass);
+		//DBInteracter dI = new DBInteracter(dbUser, dbPass);
 		myTable = dI.getTable();
 		JScrollPane tableScroller = new JScrollPane(myTable);
 		tableScroller.setPreferredSize(new Dimension(780,283));
@@ -181,17 +204,18 @@ public class HomeGUI extends JFrame{
 		aboutMenu.add(aboutItem);
 		mainMenuBar.add(aboutMenu);
 	}
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try{
 			new HomeGUI("dbuser","dbpassword");
 		}catch(NullPointerException e){
 			JOptionPane.showMessageDialog(null,"Cannot find MySQL server.. Make sure MySQL is running.","Error",JOptionPane.WARNING_MESSAGE);
 		}
-	}
+	}*/
 	public void refreshTable(){
 		try{
 			remove(tablePanel);
 		}catch(NullPointerException ex){
+			System.out.println("Wat");
 		}
 		buildTablePanel();
 		pack();
@@ -231,8 +255,16 @@ public class HomeGUI extends JFrame{
 	private class ExitListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?","Exit",JOptionPane.YES_NO_OPTION);
-			if(response==0)
+			if(response==0){
+				if(conn!=null)
+					try {
+						conn.close();
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "There was an error closing connection to database.");
+					}
 				System.exit(0);
+			}
+	       
 		}
 	}
 	private class OptionListener implements ActionListener{
@@ -249,7 +281,14 @@ public class HomeGUI extends JFrame{
 				}catch(NullPointerException ex){
 				}
 				dispose();
-				JOptionPane.showMessageDialog(null,"Logged off successfully.","Log off success",JOptionPane.INFORMATION_MESSAGE);
+				if(conn!=null)
+					try {
+						conn.close();
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "There was an error closing connection to database.");
+					}
+				//System.exit(0);
+				//JOptionPane.showMessageDialog(null,"Logged off successfully.","Log off success",JOptionPane.INFORMATION_MESSAGE);
 				new LoginGUI();
 			}
 		}

@@ -12,6 +12,7 @@ public class DeleteRecordGUI extends JFrame{
 	private JTextField idField;
 	private int deleteID = -1;
 	private ImageIcon deleteIcon = new ImageIcon(getClass().getResource("img/b_drop.png"));
+	private DBInteracter dI = HomeGUI.dI;
 	public DeleteRecordGUI(){
 		setTitle("Delete record");
 		buildInputPanel();
@@ -51,7 +52,7 @@ public class DeleteRecordGUI extends JFrame{
 				int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete record ID "+deleteID+"?",
 						"Delete comfirm",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 				if(i==0){
-					DBInteracter dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
+					//DBInteracter dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
 					dI.deleteRecord(deleteID);
 				}
 			}catch(NumberFormatException ex){

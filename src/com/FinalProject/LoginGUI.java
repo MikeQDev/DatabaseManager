@@ -17,6 +17,7 @@ public class LoginGUI extends JFrame{
 	private String dbUser, dbPass;
 	private ImageIcon loginIcon = new ImageIcon(getClass().getResource("img/login.png"));
 	private int incorrectLogins = 0;
+	public static Connection conn;
 	public LoginGUI(){
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,6 +28,17 @@ public class LoginGUI extends JFrame{
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setVisible(true);
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+            public void run() {
+            	if(conn!=null){
+    				try {
+    					conn.close();
+    				} catch (SQLException e1) {
+    					JOptionPane.showMessageDialog(null, "An error occured while closing connection.");
+    				}
+    			}
+            }
+		});
 	}
 	private void buildInputPanel(){
 		inputPanel = new JPanel();
@@ -56,6 +68,7 @@ public class LoginGUI extends JFrame{
 		buttonPanel.add(cancelButton);
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
+	
 	private class LoginListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			dbUser = userField.getText();
@@ -65,7 +78,7 @@ public class LoginGUI extends JFrame{
 				dbPass+=c;
 			try{
 				createDBTable();
-				Connection conn = DriverManager.getConnection(DB_URL, dbUser, dbPass);
+				conn = DriverManager.getConnection(DB_URL, dbUser, dbPass);
 				JLabel textCenter = new JLabel("Logged in successfully as '"+dbUser+"'.", JLabel.CENTER);
 				JOptionPane.showMessageDialog(null,textCenter,"Login Success",JOptionPane.PLAIN_MESSAGE);
 				new HomeGUI(dbUser, dbPass);
@@ -83,22 +96,25 @@ public class LoginGUI extends JFrame{
 	}
 	private void createDBTable(){
 		try{
-			Connection conn = DriverManager.getConnection(LH_URL, dbUser, dbPass);
+			conn = DriverManager.getConnection(LH_URL, dbUser, dbPass);
 			Statement stmt = conn.createStatement();
 			stmt.execute("CREATE DATABASE userdb");
+			if(stmt!=null)
+				stmt.close();
 		}catch(SQLException ex){
 		}
 		try{
-			Connection conn = DriverManager.getConnection(DB_URL, dbUser, dbPass);
+			conn = DriverManager.getConnection(DB_URL, dbUser, dbPass);
 			Statement stmt = conn.createStatement();
 			stmt.execute("CREATE TABLE UserInfo (ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, FirstName CHAR(20), LastName CHAR(25), Phone CHAR(13), Email CHAR(30)," +
 							"Birthdate DATE, StreetAddr CHAR(30), City CHAR(15), State CHAR(2), ZIP CHAR(5))");
-			stmt.executeUpdate("INSERT INTO userinfo VALUES (0,'Mike','D','203-288-4642','quintz@aol.com','2013/12/6','11 Red St.', 'Meriden' ,'CT','06450')");
-			conn.close();
+			//stmt.executeUpdate("INSERT INTO userinfo VALUES (0,'First','Last','203-288-4642','x@aol.com','2013/12/6','11 Red St.', 'Boston' ,'MA','02122')");
+			//conn.close();
 			stmt.close();
 		}catch(SQLException ex){
 		}
 	}
+	
 	private class ExitListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			System.exit(0);
@@ -109,3 +125,4 @@ public class LoginGUI extends JFrame{
 	}
 
 }
+

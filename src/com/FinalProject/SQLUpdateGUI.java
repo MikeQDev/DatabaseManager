@@ -11,7 +11,7 @@ public class SQLUpdateGUI extends JFrame{
 	private JButton submitButton, clearButton, closeButton;
 	private String dbUser, dbPass;
 	private ImageIcon sqlUpdateIcon = new ImageIcon(getClass().getResource("img/b_sql.png"));
-	
+	private DBInteracter dI = HomeGUI.dI;
 	public SQLUpdateGUI(String user, String pass){
 		dbUser = user;
 		dbPass = pass;
@@ -55,7 +55,7 @@ public class SQLUpdateGUI extends JFrame{
 	}
 	private class SubmitListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			DBInteracter dI = new DBInteracter(dbUser, dbPass);
+			//DBInteracter dI = new DBInteracter(dbUser, dbPass);
 			dI.sqlUpdate(textArea.getText());
 		}
 	}

@@ -13,6 +13,7 @@ public class ModifyUserGUI extends JFrame{
 	private ButtonGroup bGroup;
 	private JRadioButton adminRadio, userRadio;
 	private ImageIcon modifyUserIcon = new ImageIcon(getClass().getResource("img/b_usredit.png"));
+	private DBInteracter dI = HomeGUI.dI;
 	public ModifyUserGUI(){
 		setTitle("Modify user privileges");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -66,7 +67,7 @@ public class ModifyUserGUI extends JFrame{
 	}
 	private class ModifyListener implements ActionListener{
 		public void actionPerformed(ActionEvent arg0) {
-			DBInteracter dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
+			//DBInteracter dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
 			String u = userField.getText();
 			if(!u.equals("")){
 				if(!HomeGUI.dbUser.equalsIgnoreCase(userField.getText())){

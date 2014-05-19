@@ -12,6 +12,7 @@ public class DeleteUserGUI extends JFrame{
 	private JButton deleteButton, closeButton;
 	private ImageIcon delUserIcon = new ImageIcon(getClass().getResource("img/b_usrdrop.png"));
 	private String user = "";
+	private DBInteracter dI = HomeGUI.dI;
 	public DeleteUserGUI(){
 		setTitle("Delete user");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -51,7 +52,7 @@ public class DeleteUserGUI extends JFrame{
 			if(!user.equals("")){
 				int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete user '"+user+"'?","Delete confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if(i==0){
-					DBInteracter dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
+					//DBInteracter dI = new DBInteracter(HomeGUI.dbUser, HomeGUI.dbPass);
 					dI.deleteUser(user);
 				}
 			}else{

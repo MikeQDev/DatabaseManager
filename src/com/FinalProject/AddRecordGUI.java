@@ -17,6 +17,7 @@ public class AddRecordGUI extends JFrame{
 	private String dbUser, dbPass;
 	private String fName, lName, phone, email, addr,
 					city, state, ZIP, date, formattedPhone;
+	private DBInteracter dI = HomeGUI.dI;
 	private ImageIcon addIcon = new ImageIcon(getClass().getResource("img/b_snewtbl.png"));
 	public AddRecordGUI(String user, String pass){
 		dbUser = user;
@@ -90,7 +91,7 @@ public class AddRecordGUI extends JFrame{
 	}
 	private class AddListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			DBInteracter dI = new DBInteracter(dbUser, dbPass);
+			//DBInteracter dI = new DBInteracter(dbUser, dbPass);
 			fName = firstField.getText();
 			lName = lastField.getText();
 			phone = phoneField.getText();

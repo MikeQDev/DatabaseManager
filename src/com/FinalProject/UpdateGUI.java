@@ -19,9 +19,8 @@ public class UpdateGUI extends JFrame{
 	private JPanel inputPanel, buttonPanel;
 	private String dbUser, dbPass;
 	private int recordID;
-	private DBInteracter dI;
+	private DBInteracter dI = HomeGUI.dI;
 	private ImageIcon updateIcon = new ImageIcon(getClass().getResource("img/update.png"));
-
 	public UpdateGUI(String user, String pass){
 		dbUser = user;
 		dbPass = pass;
@@ -34,7 +33,7 @@ public class UpdateGUI extends JFrame{
 	public void createGUI(){
 		setTitle("Updater");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		dI = new DBInteracter(dbUser, dbPass);
+		//dI = new DBInteracter(dbUser, dbPass);
 		if(dI.getInfo(recordID)!=0){
 			buildInputPanel();
 			buildButtonPanel();
@@ -111,7 +110,7 @@ public class UpdateGUI extends JFrame{
 	}
 	private class UpdateListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			DBInteracter dI = new DBInteracter(dbUser, dbPass);
+			//DBInteracter dI = new DBInteracter(dbUser, dbPass);
 			int id = Integer.parseInt(idField.getText());
 			fName = firstField.getText();
 			lName = lastField.getText();
